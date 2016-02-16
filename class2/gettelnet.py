@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import telnetlib
+import time
 
 TELNET_PORT = 23
 TELNET_TIMEOUT = 6
@@ -15,9 +16,13 @@ def main():
     remote_conn.write(username + '\n')
     output += remote_conn.read_until("assword:", TELNET_TIMEOUT)
     remote_conn.write(password + '\n')
+    time.sleep(1)
+    output += remote_conn.read_very_eager()
+    remote_conn.write("show ip int brief" + '\n')
+    time.sleep(1)
+    output += remote_conn.read_very_eager()
     print output
-
     remote_conn.close()
 
-if __name__ == 'main':
+if __name__ == '__main__':
     main()
